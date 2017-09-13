@@ -10,7 +10,7 @@
 
 @import url(http://fonts.googleapis.com/css?family=Source%20Sans%20Pro:300,400,500,600,700);
 p {
-	font-size: 14px;
+	font-size: 16px;
 	line-height: 22.4px;
 	color: #6c7279;
 }
@@ -33,7 +33,7 @@ h4 {
 	font-weight: 400;
 }
 h5 {
-	font-size: 14px;
+	font-size: 16px;
 	color: #2d3033;
 	text-transform: uppercase;
 	font-weight: 700;
@@ -41,7 +41,7 @@ h5 {
 .btn {
 	background-color: #3bc492;
 	color: #fff;
-	font-size: 13px;
+	font-size: 16px;
 	font-weight: 600;
 	letter-spacing: 5px;
 	border: 0;
@@ -353,7 +353,7 @@ ul li {
 .intro p {
 	color: #6c7279;
 	display: block;
-	font-size: 13px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
 	/*margin-top: 30px;*/
@@ -363,18 +363,23 @@ ul li {
 	padding: 20px;
 }
 
+.img-responsive {
+	margin-top: 35px;
+}
+
 /*.avatar {
 	padding: 2%;;
 }
+/*
 
 .avatar img {
 	max-height: 150px;
 	border-radius: 100%;
 	border: 2px solid grey;
 	margin: 10px;
-}*/
+}
 
-/* ------------------------------------------------------------------------------
+ ------------------------------------------------------------------------------
 	 Services
 -------------------------------------------------------------------------------*/
 .service-section {
@@ -538,7 +543,7 @@ ul li {
 .extras p {
 	color: #fff;
 	display: block;
-	font-size: 13px;
+	font-size: 10px;
 	font-style: normal;
 	letter-spacing: 2px;
 	font-weight: 400;
