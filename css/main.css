@@ -72,7 +72,7 @@ a:hover, a:focus {
 	transition: background-color, color, 0.3s;
 }
 body {
-	font-family: "Open Sans", sans-serif;
+	font-family: "Source Sans Pro";
 	font-weight: 400;
 	color: #6c7279;
 }
@@ -313,8 +313,17 @@ ul li {
 .banner-btn {
 	opacity: 0.5;
 }
+
+#profile-img {
+	height: 150px;
+	width: 150px;
+	border: 3px solid #54686A;
+	border-radius: 100%;
+	margin: 0 auto;
+}
+
 .banner-text {
-	padding-top: 33%;
+	padding-top: 25%;
 }
 .banner-text h1 {
 	color: #fff;
@@ -403,11 +412,17 @@ ul li {
 .work-heading {
 	text-align: center;
 	margin: 0 auto;
-	font-family: 'Yesteryear', cursive;
-	font-size: 48px;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 36px;
 	color: #54686A;
 	padding: 20px;
 	border-bottom: 1px solid #54686A;
+}
+
+h1.work-heading {
+	text-align: center;
+	font-family: 'Source Sans Pro', sans-serif;
+	color:
 }
 
 .work {
@@ -488,51 +503,8 @@ ul li {
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 }
-/* ------------------------------------------------------------------------------
-	 Teams
--------------------------------------------------------------------------------*/
-.person {
-	max-width: 270px;
-	text-align: center;
-}
-.person-content {
-	margin-top: 20px;
-}
-.person h4 {
-	font-weight: 400;
-}
-.person h5 {
-	color: #e84545;
-	font-size: 13px;
-	font-weight: 400;
-	margin-bottom: 20px;
-}
-.social-icons, .footer .footer-share {
-	margin-top: 30px;
-}
-.social-icons li, .footer .footer-share li {
-	display: inline-block;
-	float: none;
-}
-.social-icons a, .footer .footer-share a {
-	border: 1px solid #e8ecee;
-	-moz-border-radius: 50%;
-	-webkit-border-radius: 50%;
-	border-radius: 50%;
-	color: #c6cacc;
-	display: block;
-	font-size: 14px;
-	height: 32px;
-	line-height: 32px;
-	margin-right: 5px;
-	text-align: center;
-	width: 32px;
-}
-.social-icons a:hover, .footer .footer-share a:hover {
-	background-color: #e84545;
-	border-color: #e84545;
-	color: #fff;
-}
+
+
 /* ------------------------------------------------------------------------------
 	 Extras
 -------------------------------------------------------------------------------*/
