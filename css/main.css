@@ -72,7 +72,7 @@ a:hover, a:focus {
 	transition: background-color, color, 0.3s;
 }
 body {
-	font-family: "Source Sans Pro";
+	font-family: "Open Sans", sans-serif;
 	font-weight: 400;
 	color: #6c7279;
 }
@@ -400,6 +400,16 @@ ul li {
 /* ------------------------------------------------------------------------------
 	 Works
 -------------------------------------------------------------------------------*/
+.work-heading {
+	text-align: center;
+	margin: 0 auto;
+	font-family: 'Yesteryear', cursive;
+	font-size: 48px;
+	color: #54686A;
+	padding: 20px;
+	border-bottom: 1px solid #54686A;
+}
+
 .work {
 	-moz-box-shadow: 0 0 0 1px #fff;
 	-webkit-box-shadow: 0 0 0 1px #fff;
@@ -407,6 +417,7 @@ ul li {
 	overflow: hidden;
 	position: relative;
 }
+
 .work img {
 	width: 100%;
 	height: 100%;
