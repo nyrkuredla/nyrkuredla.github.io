@@ -463,16 +463,19 @@ p.work-caption {
 	position: absolute;
 	text-align: center;
 	top: 50%;
-	width: 90%;
+	width: 100%;
 	-moz-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	-webkit-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
 
+p.caption, p.caption-title {
+	padding: 20px;
+}
+
 .work .overlay-caption p.caption-title {
 	text-decoration: underline;
-
 }
 
 .work h5, .work p, .work img {
