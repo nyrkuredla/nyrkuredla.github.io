@@ -64,6 +64,11 @@ h5 {
 a {
 	color: #e84545;
 }
+
+.contact-link {
+	color: #E56363;
+}
+
 a:hover, a:focus {
 	text-decoration: none;
 	-moz-transition: background-color, color, 0.3s;
@@ -439,6 +444,7 @@ p.work-caption {
 	box-shadow: 0 0 0 1px #fff;
 	overflow: hidden;
 	position: relative;
+	background: rgba(84, 104, 106, 0.5)
 }
 
 .work img {
