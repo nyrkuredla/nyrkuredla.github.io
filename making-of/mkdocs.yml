@@ -1,0 +1,10 @@
+site_name: Documentation Garden
+site_description: A technical writing portfolio showcasing my learning journey, featuring a collection of my writing in a docs-as-code format.
+site_author: Ryan Kelley
+
+theme: 
+  name: cinder
+  favicon: img/sword_circuit_favicon.ico
+nav:
+  - Home: index.md
+  - About: about/about-me.md
