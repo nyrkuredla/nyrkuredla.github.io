@@ -3,8 +3,8 @@ site_description: A technical writing portfolio showcasing my learning journey, 
 site_author: Ryan Kelley
 
 theme: 
-  name: material
-
+  name: cinder
+  favicon: img/sword_circuit_favicon.ico
 nav:
   - Home: index.md
   - About: about/about-me.md
