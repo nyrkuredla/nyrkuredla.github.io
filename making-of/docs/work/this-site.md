@@ -3,7 +3,7 @@
 I created a technical writing portfolio project using a docs-as-code approach. Here's what I accomplished and how:
 
 ## Technologies & Tools Used
-- **Generative AI (Claude and ChatGPT)**: Ideating, debugging, venting receptacles when debugging the GitHub Pages workflow
+- **Generative AI (Claude and ChatGPT)**: Ideating, debugging, generating most of this summary, debugging rant receptacle 
 - **MkDocs with Material theme**: Documentation framework for creating the site
 - **Git**: Version control for the project
 - **GitLab**: Primary repository for demonstrating Git workflow
