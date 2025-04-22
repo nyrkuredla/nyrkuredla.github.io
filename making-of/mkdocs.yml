@@ -7,5 +7,5 @@ theme:
   name: material
   favicon: img/sword_circuit_favicon.ico
 nav:
-  - Home: index.md
-  - About: about/about-me.md
+  - Home: docs/index.md
+  - About: docs/about/working-with-me.md
