@@ -1,0 +1,12 @@
+site_name: Documentation Garden
+site_description: A technical writing portfolio showcasing my learning journey, featuring a collection of my writing in a docs-as-code format.
+site_author: Ryan Kelley
+site_url: https://nyrkuredla.github.io
+
+theme: 
+  name: material
+  favicon: img/sword_circuit_favicon.ico
+nav:
+  - Home: index.md
+  - What I'm working on:
+    - This site: work/this-site.md
