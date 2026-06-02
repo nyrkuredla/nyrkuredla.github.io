@@ -1,0 +1,916 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v6.2.1"><link rel="preconnect" href="https://fonts.bunny.net"><link href="https://fonts.bunny.net/css?family=ibm-plex-mono:400,400i,500,500i,600,600i,700,700i" rel="stylesheet"><!-- Theme detection script - runs before page renders --><script>
+      const theme = (() => {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+          return localStorage.getItem("theme") ?? "light";
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+
+      if (theme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
+
+      window.localStorage.setItem("theme", theme);
+    </script> <title>Beyond the Metrics: Lessons from NLP Model Evaluation (2024)</title> <link rel="stylesheet" href="/_astro/Layout.HvkjhuWO.css"></head> <body class="zag-bg zag-text zag-transition font-mono"> <header class="zag-bg zag-border-b zag-transition fixed top-0 w-full z-[100]"> <div class="zag-bg zag-transition sm:hidden relative z-50 py-4 flex items-center"> <button class="px-4" type="button" aria-label="Toggle navigation menu"> <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512" class="zag-fill zag-transition"> <title>Navigation menu</title> <path d="M80 96h352v32H80zm0 144h352v32H80zm0 144h352v32H80z"></path> </svg> </button> </div> <nav class="zag-bg zag-border-b zag-transition fixed sm:relative inset-x-0 top-0 h-auto sm:px-4 flex justify-between items-center flex-col sm:flex-row max-w-6xl mx-auto py-4 sm:border-none"> <div class="px-4 sm:px-0 font-bold font-display text-xl mb-4 sm:mb-0"> <a href="/" class="hover:text-orange-500 transition-colors">warpthread</a> </div> <div class="flex flex-col font-display gap-6 sm:flex-row px-4 sm:px-0 mt-8 sm:mt-0 items-center text-[10px]"> <a href="/blog" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self"> Dispatches  </a><a href="/experiments" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self"> Experiments  </a><a href="/topics" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self"> Topics  </a><a href="/reading-list" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self"> Reading List  </a> </div> <div class="flex gap-4 justify-between px-4 sm:px-0"> <a href="https://github.com/nyrkuredla" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self" aria-label="Ryan GitHub Profile">  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="zag-fill zag-transition"> <title>GitHub</title> <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"></path> </svg>   </a> <a href="https://linkedin.com/in/ryantkelley" class="zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" target="_self" aria-label="Ryan LinkedIn Profile">  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" class="zag-fill zag-transition"> <title>LinkedIn</title> <path d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.12 19h-3.08v-9h3.08v9zm-1.54-10.29c-.99 0-1.79-.8-1.79-1.79s.8-1.79 1.79-1.79 1.79.8 1.79 1.79-.8 1.79-1.79 1.79zm13.16 10.29h-3.08v-4.89c0-1.16-.02-2.64-1.61-2.64s-1.86 1.26-1.86 2.57v4.96h-3.08v-9h2.96v1.23h.04c.41-.78 1.4-1.6 2.88-1.6 3.08 0 3.65 2.03 3.65 4.66v4.71z"></path> </svg>   </a> <button class="border-none bg-none focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" type="button" id="themeToggle" aria-label="Theme Toggle"> <svg width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" name="Theme toggle"> <title>Theme toggle</title> <path class="zag-transition fill-neutral-900 dark:fill-transparent" fill-rule="evenodd" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zm0 1.5a7 7 0 1 0 0-14 7 7 0 0 0 0 14zm12-7a.8.8 0 0 1-.8.8h-2.4a.8.8 0 0 1 0-1.6h2.4a.8.8 0 0 1 .8.8zM4 12a.8.8 0 0 1-.8.8H.8a.8.8 0 0 1 0-1.6h2.5a.8.8 0 0 1 .8.8zm16.5-8.5a.8.8 0 0 1 0 1l-1.8 1.8a.8.8 0 0 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM6.3 17.7a.8.8 0 0 1 0 1l-1.7 1.8a.8.8 0 1 1-1-1l1.7-1.8a.8.8 0 0 1 1 0zM12 0a.8.8 0 0 1 .8.8v2.5a.8.8 0 0 1-1.6 0V.8A.8.8 0 0 1 12 0zm0 20a.8.8 0 0 1 .8.8v2.4a.8.8 0 0 1-1.6 0v-2.4a.8.8 0 0 1 .8-.8zM3.5 3.5a.8.8 0 0 1 1 0l1.8 1.8a.8.8 0 1 1-1 1L3.5 4.6a.8.8 0 0 1 0-1zm14.2 14.2a.8.8 0 0 1 1 0l1.8 1.7a.8.8 0 0 1-1 1l-1.8-1.7a.8.8 0 0 1 0-1z"></path> <path class="zag-transition fill-transparent dark:fill-neutral-100" fill-rule="evenodd" d="M16.5 6A10.5 10.5 0 0 1 4.7 16.4 8.5 8.5 0 1 0 16.4 4.7l.1 1.3zm-1.7-2a9 9 0 0 1 .2 2 9 9 0 0 1-11 8.8 9.4 9.4 0 0 1-.8-.3c-.4 0-.8.3-.7.7a10 10 0 0 0 .3.8 10 10 0 0 0 9.2 6 10 10 0 0 0 4-19.2 9.7 9.7 0 0 0-.9-.3c-.3-.1-.7.3-.6.7a9 9 0 0 1 .3.8z"></path> </svg> </button> <script>
+  const handleToggleClick = () => {
+    const element = document.documentElement;
+    element.classList.toggle("dark");
+
+    const isDark = element.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  };
+
+  document
+    .getElementById("themeToggle")
+    ?.addEventListener("click", handleToggleClick);
+</script> </div> </nav> </header> <script type="module">const a=document.querySelector("button"),n=document.querySelector("nav");let t=!1;function e(){window.matchMedia("(max-width: 640px)").matches?n.style.transform=t?"translateY(0)":"translateY(-100%)":(n.style.transform="translateY(0)",t=!1)}function s(){t=!t,e()}a?.addEventListener("click",s);window.addEventListener("resize",e);e();</script> <main>   <section class="p-4 max-w-3xl mx-auto pt-32 pb-16 max-w-5xl mx-auto px-4">  <div class="mb-12 border-b border-zinc-200 dark:border-zinc-800 pb-6"> <div class="text-[10px] text-orange-600 font-mono font-bold uppercase tracking-widest mb-2 flex justify-between"> <span>Whitepaper: Model evaluation research from the 2024 AI Mentorship Program</span> </div> <h1 class="text-3xl sm:text-4xl leading-normal font-display mb-4"> Beyond the Metrics: Lessons from NLP Model Evaluation (2024) </h1> <div> <span class="tooltip-wrapper inline relative whitespace-normal"><button class="tooltip-trigger cursor-help focus:outline-none bg-transparent border-none p-0 m-0 text-inherit font-inherit inline" aria-haspopup="true" type="button"> <span class="inline-flex items-center gap-1.5 text-[8px] font-mono uppercase tracking-widest text-zinc-400 hover:text-orange-500 border border-zinc-300 dark:border-zinc-700 hover:border-orange-500 transition-colors px-2 py-1"> <span>human-authored</span> <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path> </svg> </span> </button><span class="tooltip-content hidden absolute top-0 left-0 w-72 bg-zinc-50 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100 text-[11px] font-mono leading-snug p-3 border border-zinc-300 dark:border-zinc-700 shadow-2xl z-[9999] whitespace-normal"> <span class="mb-2 text-[9px] text-orange-600 dark:text-orange-500 font-bold uppercase tracking-widest border-b border-zinc-200 dark:border-zinc-800 pb-1 flex justify-between items-center"> <span>Field Note</span> <span class="text-[8px] opacity-50">#DISCLOSURE-01</span> </span> <span class="block whitespace-normal prose-sm dark:prose-invert prose-a:text-orange-600 dark:prose-a:text-orange-400 prose-a:underline prose-a:underline-offset-2">   <div class="mt-2 text-zinc-600 dark:text-zinc-400"> No AI used in generating content; 100% written by me. </div>  </span> <span class="block mt-3 pt-2 border-t border-zinc-200 dark:border-zinc-800 text-[9px] uppercase tracking-widest opacity-70 hover:opacity-100 transition-opacity"> <a href="/how-i-use-ai" class="text-zinc-500 dark:text-zinc-400 no-underline hover:text-orange-500 dark:hover:text-orange-400 flex items-center gap-1"> <span>View Policy</span> <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> </a> </span> <!-- Arrow --><span class="tooltip-arrow absolute bg-zinc-50 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 border-r border-b w-2 h-2 rotate-45"></span></span></span><script type="module" src="/_astro/Tooltip.astro_astro_type_script_index_0_lang.DwFtuQJX.js"></script> </div> </div> <div class="lg:grid lg:grid-cols-12 lg:gap-16"> <div class="lg:col-span-9"> <div class="w-full max-w-none font-mono prose prose-headings:font-mono prose-img:rounded-none prose-p:text-(--color-zag-dark) prose-p:dark:text-(--color-zag-light) prose-pre:bg-zinc-50 prose-pre:dark:bg-zinc-900 prose-code:text-(--color-zag-dark) dark:prose-code:text-(--color-zag-light) prose-a:underline-offset-4 prose-h1:text-2xl prose-a:text-(--color-zag-dark) dark:prose-a:text-(--color-zag-light) prose-headings:text-(--color-zag-dark) prose-headings:dark:text-(--color-zag-light) prose-code:text-(--color-zag-dark) dark:prose-code:text-(--color-zag-light) prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-h5:text-base prose-h6:text-sm prose-strong:text-(--color-zag-dark) dark:prose-strong:text-(--color-zag-light) prose-td:text-(--color-zag-dark) dark:prose-td:text-(--color-zag-light) prose-th:text-(--color-zag-dark) dark:prose-th:text-(--color-zag-light) prose-li:text-(--color-zag-dark) dark:prose-li:text-(--color-zag-light) prose-ul:marker:text-(--color-zag-dark) prose-ul:dark:marker:text-(--color-zag-light) prose-ol:marker:text-(--color-zag-dark) prose-ol:dark:marker:text-(--color-zag-light) prose-a:offset-(--zag-offset) prose-a:focus:outline-2 prose-a:focus:outline-offset-2 prose-a:focus:outline-zag-dark prose-a:dark:focus:outline-zag-light">  <h1 id="abstract">Abstract</h1>
+<p>Unstructured text is challenging for knowledge management (KM) systems; large language models (LLMs) can identify entities and summarize content, but proprietary models such as Claude and ChatGPT can raise concerns about data privacy, transparency, and resource consumption. Open-source Natural Language Processing (NLP) models may provide a viable alternative that prioritizes data privacy and control. This research project compared out-of-the-box performance of open source NLP models that can be run locally on a laptop for named entity recognition (NER) and summarization tasks.</p>
+<h1 id="introduction">Introduction</h1>
+<p>In recent years, the growing use of NLP models (especially LLMs) has transformed various industries, offering powerful capabilities for tasks like NER and text summarization. These models hold promise for automated knowledge extraction, and content summarization, which are essential for improving the efficiency of KM systems. However, as organizations increasingly rely on proprietary LLMs, concerns about data privacy, transparency, and resource consumption or becoming more pronounced. Open-source NLP models have emerged as a potential solution, offering greater control over data privacy and computational costs.</p>
+<p>This research investigates the performance of open-source NLP models in performing two key text processing tasks – NER and summarization – while focusing on their suitability for deployment in resource-constrained environments, such as local laptop deployments. By comparing a diverse set of models - SpaCy, BERT, DistilBERT, BART, T5, and Pegasus - this study provides a detailed evaluation of their performance across three levels of task complexity, assessing not only accuracy, but also resource utilization. The goal of this product is to inform organizations on the trade-offs involved in selecting the best open-source models for these tasks, considering both their computational and accuracy demands.</p>
+<h1 id="methodology">Methodology</h1>
+<p>The following sections provide details about the models selected, and the technologies and processes used to generate ground truth, data, evaluate the models, and create the pipelines to test their performance.</p>
+<h2 id="model-selection">Model Selection</h2>
+<p>Three models were selected for both the NER and summarization tasks, to provide a range of outputs and experiences to compare: for NER, we chose SpaCy, BERT, and DistilBERT; for summarization, we chose T5, BART, and Pegasus. The following sections provide descriptions of each model as well as initial predictions regarding performance.</p>
+<h3 id="ner-models">NER Models</h3>
+<h4 id="spacy">SpaCy</h4>
+<p>SpaCy is an open-source Python library designed for production NLP tasks. First established in 2015, SpaCy has a robust ecosystem offering NER as well as text classification, rule-based matching, lemmatization, and other common NLP tasks. SpaCy is fast, lightweight, and designed specifically for production environments, and it’s easy to integrate with existing workflows thanks to its being written in Python. Its statistical NER system identifies entities such as companies, locations, works of art, and organizations. SpaCy’s <em>en_core_web_sm</em> model was chosen for this task due to its speed, low resource consumption, and ease of integration; however, we expected trade-offs due to its lower out-of-the-box accuracy, compared to transformer models.</p>
+<h4 id="bert">BERT</h4>
+<p>Bi-directional Encoder Representations from Transformers (BERT) is a Hugging Face transformer model for NLP, first developed in 2018 by researchers at Google AI Language. BERT was built on a transformer architecture which uses an attention mechanism to signal which inputs are the most important to further process. This “attention” makes transformer models able to efficiently process millions of data points by focusing only on the most relevant inputs. Transformer models can be encoder–only, decoder–only, or both; BERT is encoder–only, which means that the architecture is optimized to receive input and build a representation of (or <em>encode</em>) its features. In BERT’s case, this architecture enabled it to be pre-trained extremely efficiently on a massive data set (specifically, Wikipedia and Toronto Book Corpus) using masked language modeling (MLM) and next-sentence prediction (NSP). The MLM approach, trains, a model by masking, or hiding, a word in a sentence and instructing the model to use the words on either side as context clues to predict the masked word. NSP is similarly used to train BERT to predict whether a given sentence “follows “the previous sentence or not.</p>
+<p>BERT represented a breakthrough in the application of transformer architecture to NLP tasks; as such, we predicted that it would be more accurate out of the box than SpaCy, but likely would come with a higher computational/resource cost.</p>
+<h4 id="distilbert">DistilBERT</h4>
+<p>DistilBERT is a “distilled” version of BERT which was first proposed in 2019. DistilBERT was created to address concerns around the cost and privacy concerns of large models like BERT, and provide a lighter-weight option that preserves much of the accuracy of the original BERT model. Researchers used a compression technique called “knowledge distillation” to train the smaller DistilBERT model (the “student”) to mimic the output distribution of BERT (the “teacher”) - the result is a 40% reduction in the number of parameters while retaining more than 95% of the performance. As such we expected that. DistilBERT would performed slightly less well on some of the NER tasks than BERT, while providing better performance in terms of resource consumption and runtime.</p>
+<h3 id="summarization-models">Summarization Models</h3>
+<h4 id="bart">BART</h4>
+<p>Bi-directional and Auto-Regressive Transformer (BART), originally developed by Facebook AI researchers in 2019, is another transformer model - as opposed to BERT, which is an encoder-only model, BART is an encoder-decoder (or <em>sequence-to-sequence</em>) model. The addition of the decoder enables the model to first encode the input and build an internal representation, then apply a decoder to generate an output. Sequence-to-sequence models are well suited to generative tasks, such as summarization, but are also more computationally expensive than their encoder only counterparts. Summarization is also notoriously difficult for NLP models, so we expected significant trade-offs in resource consumption versus performance.</p>
+<h4 id="t5">T5</h4>
+<p>Text-to-Text Transfer Transformer (T5) is a powerful NLP model developed by Google Research in 2019. As the name suggests, this model converts NLP tasks into a unified text-to-text format (as opposed to other models like BERT, which use various outputs such as class labels, depending on the type of task). This reformed architecture resulted in a model that is both flexible and performance: its developers reported state-of-the-art results on benchmark tests, and due to its text to text format, it can be modified and applied to a wide variety of NLP tasks. However, this level of performance comes at a high computing cost. We decided to test the <em>t5-small</em> model to minimize resource consumption.</p>
+<h4 id="pegasus">Pegasus</h4>
+<p>Pegasus is a sequence to sequence model with the same encoder decoder architecture as BART. It is pre-trained on the same MLM function as BERT, as well as a summarization specific function called gap sentence generation (GSG). Pegasus is optimized specifically for abstractive summarization; as opposed to extractive summarization models, which collocate relevant chunks from the input, abstractive models, generate their own summary, based on what they judge to be the most salient information from the input. Pegasus was included to provide an option, specifically optimized for abstractive summary out of the box.</p>
+<h2 id="ground-truth-data-creation">Ground-Truth Data Creation</h2>
+<h3 id="approach">Approach</h3>
+<p>To evaluate the performance of the models on diverse and challenging scenarios, we designed a tiered data set creation approach. We initially considered using real world data (e.g., book passages), but decided to generate sentences programmatically to give more granular control over the input. For both N ER and summarization tasks, a tiered approach was used to introduce three levels of increasingly challenging tasks to the models, using sets of 40 sentences per level.</p>
+<p>NER sentences had the following characteristics according to level:</p>
+<ul>
+<li><strong>Level 1:</strong> simple, declarative sentences in simple past or present, tense with clear subject-verb-object (SVO) structure. The goal was to identify whether models accurately recognize common entities without any ambiguity.</li>
+<li><strong>Level 2</strong>: more complex sentence sentences with one or more nested clauses; descriptive sentences that create hierarchy (e.g., titles); prepositional phrase and embedded relationships. The goal was to test models’ performance on correctly identifying entities that are part of more complex or nested structures.</li>
+<li><strong>Level 3</strong>: sentence sentences within ambiguous or overlapping entities (e.g., “New York Times”, which is an organization, but contains a location name); simple, declarative, sentence sentences in past or simple present tense. The goal was to determine how accurately models recognize and assign entity types which are overlapping or ambiguous.</li>
+</ul>
+<p>Summarization texts had the following characteristics according to level:</p>
+<ul>
+<li><strong>Level 1</strong>: Simple and direct sentences with clear structure; low complexity; factual descriptions. Short texts of 3 to 5 sentences. The goal was to assess models’ summarization capabilities using straightforward content with clear language.</li>
+<li><strong>Level 2</strong>: academic and precise, with specialized vocabulary; sentences with medium complexity, including jargon, technical, freezes, and pros/cons. Medium length texts of 5 to 10 sentences. The goal was to assess models’ summarization capabilities using technical jargon and acronyms to ensure they captured the pros/cons accurately.</li>
+<li><strong>Level 3</strong>: cohesive and detailed multipart narratives with transitional phrases and logical flow. Medium length texts of 5 to 8 sentences. The goal was to test models’ ability to summarize logical narratives involving multiple perspectives and cause/effect relationships.</li>
+</ul>
+<p>The sentences in each level were constructed from templates and predefined lists of entities (people, locations, and organizations); each level of sentence complexity was then split into common and fantasy “flavors” of entities to mimic domain-specific language that might further complicate a model’s predictions in production.</p>
+<p>The following tables provide details and examples of the tiered approaches used for the NER and summarization tasks.</p>
+<p><strong>NER Model Evaluation Tiers</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tier</th><th>Sentence Features</th><th>Entity Types</th><th>Example</th><th>Goal</th></tr></thead><tbody><tr><td>1</td><td>Simple, declarative sentences in simple past or present tense with clear subject-verb-object (SVO) structure</td><td>Standard names for people, well-known geographical locations, and plausible real-world organizations (“common” entity types)</td><td>“John Smith of Innovatech Solutions met with leaders in Berlin to discuss a trade agreement.”</td><td>Identify whether models accurately recognize common entities without any ambiguity.</td></tr><tr><td>2</td><td>Simple, declarative sentences in simple past or present tense with clear subject-verb-object (SVO) structure</td><td>Fantasy names for people, geographical locations, and organizations (“fantasy” entity types)</td><td>“Guillam Swiftfoot of the Crimson Shield met with leaders in Galeharbor to discuss a trade agreement.”</td><td>Identify whether models accurately recognize fantastical entities without any ambiguity.</td></tr><tr><td>3</td><td>More complex sentences with one or two nested clauses; descriptive sentences that create hierarchy (e.g., titles); prepositional phrases and embedded relationships</td><td>Common</td><td>”Christina Romero, a senior partner at LuminaGen Systems, relocated to Lagos.”</td><td>Test models’ performance on correctly identifying common entities that are part of more complex, nested structures</td></tr><tr><td>4</td><td>More complex sentences with one or two nested clauses; descriptive sentences that create hierarchy (e.g., titles); prepositional phrases and embedded relationships</td><td>Fantasy</td><td>”The Frostborn Clan, led by Caitrona Connorus, met in Hargion City to discuss the upcoming negotiations.”</td><td>Test models’ performance on correctly identifying fantastical entities that are part of more complex, nested structures</td></tr><tr><td>5</td><td>Sentences with ambiguous/overlapping entities (e.g., “The New York Times” is an organization but contains a location name); simple declarative sentences in past or simple present tense</td><td>Common</td><td>”Megan White writes for the Sao Paolo Record.”</td><td>Determine how accurately models recognize and assign common entity types which are overlapping/ambiguous.</td></tr><tr><td>6</td><td>Sentences with ambiguous/overlapping entities (e.g., “The New York Times” is an organization but contains a location name); simple declarative sentences in past or simple present tense</td><td>Fantasy</td><td>”Haderai Delane volunteers for the Ironforge Historical Society.”</td><td>Determine how accurately models recognize and assign fantasy entity types which are overlapping/ambiguous.</td></tr></tbody></table>
+<p><strong>Summarization Model Evaluation Tiers</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tier</th><th>Sentence Features</th><th>Entity Types</th><th>Example Input</th><th>Example Summary</th><th>Goal</th></tr></thead><tbody><tr><td>1</td><td>Simple and direct sentences with clear structure; low complexity, factual dscriptions. Short (3-5 sentences)</td><td>Common</td><td>The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889, it stands as a global symbol of France. It attracts millions of visitors each year.</td><td>The Eiffel Tower in Paris, completed in 1889, is a global symbol and popular tourist attraction.</td><td>Assess models’ basic summarization capabilities using straightforward, real-world content with clear language.</td></tr><tr><td>2</td><td>Simple and direct sentences with clear structure; low complexity, factual dscriptions. Short (3-5 sentences)</td><td>Fantasy</td><td>The Umbrite cavern in Isenfell glows with an otherworldly light as the arcane ores shimmer in hues of violet and blue. It was discovered in 267. The Umbrite Cavern remains a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>The Umbrite Cavern in Isenfell, discovered in 267, is a mysterious site said to grant visions to adventurers.</td><td>Assess models’ basic summarization capabilities using straightforward content with clear language.</td></tr><tr><td>3</td><td>Academic and precise, with specialized vocabulary. Medium complexity, including jargon, technical phrases, and pros/cons. Medium (5-10 sentences).</td><td>Common</td><td>The CRISPR-Cas9 gene-editing tool allows researchers to make precise modifications to DNA. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. Despite its promise, ethical concerns regarding use in human embryos remain a topic of intense debate.</td><td>CRISPR-Cas9 enables precise DNA editing, offering potential cures for genetic disorders but raising ethical concerns.</td><td>Assess models’ summarization capabilities using real-world technical jargon and pros/cons.</td></tr><tr><td>4</td><td>Academic and precise, with specialized vocabulary. Medium complexity, including jargon, technical phrases, and pros/cons. Medium (5-10 sentences).</td><td>Fantasy</td><td>The Arcane Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled unprecedented advancements in transportation and defense. However, prolonged exposure to aether waves is known to cause delirium, leading to a condition which scholars have termed “arcane decay”.</td><td>The Arcane Conductor channels aether energy to power city infrastructure, but poses risks of ‘arcane decay’ from long exposure.</td><td>Assess models’ basic summarization capabilities using straightforward content with clear language.</td></tr><tr><td>5</td><td>Cohesive and detailed multi-part narratives with transitional phrases, multiple perspectives, and logical flow. 5-8 sentences</td><td>Common</td><td>The city council debated the budget proposal for weeks. After much deliberation, they decided to allocate more funds to public transportation to reduce traffic congestion. This decision was met with approval from environmental groups. However, local businesses voiced concerns about potential tax increases to cover the new expenses. As a result, the council adjusted the plan to balance both interests.</td><td>The city council approved more funding for public transport to cut traffic, after getting support from environmental groups and addressing business concerns with budget adjustments.</td><td>Test models’ ability to summarize logical narratives involving multiple perspectives and cause/effect relationships.</td></tr><tr><td>6</td><td>Cohesive and detailed multi-part narratives with transitional phrases, multiple perspectives, and logical flow. (5-8 sentences)</td><td>Fantasy</td><td>The Royal Forest Guardians decided to implement a new enchantment strategy to protect endangered magical creatures. This strategy was developed after extensive research and collaboration with local sorcerers and druids. Elven councils praised the initiative for its potential to preserve magical biodiversity. However, villagers were concerned about restrictions on land use and the potential impact on their livelihoods. To address these concerns, the Guardians included provisions for sustainable land use practices that benefit both conservation and local livelihoods.</td><td>The Royal Forest Guardians implemented a new enchantment strategy to protect endangered creatures, after collaborating with sorcerers and addressing villager concerns with sustainable practices.</td><td>Test models’ ability to summarize logical narratives involving multiple perspectives and cause/effect relationships.</td></tr></tbody></table>
+<h3 id="tools-and-techniques">Tools and Techniques</h3>
+<p>We use a mix of generative AI and Python scripts (built and run in Jupyter notebooks) to ingest entities and generate annotation ground-truth files. The following sections detail the specific tools and processes used to generate NER and summarization ground-truth data sets.</p>
+<h4 id="ner-ground-truth-generation-procedure">NER Ground-truth Generation Procedure</h4>
+<p>For the NER sentence generation procedure, lists of 50 entities per entity type were first generated using Copilot and collected in a single JSON file for ease of integration into generation scripts. These entity types included:</p>
+<ul>
+<li><strong>Common people names</strong> (e.g., “Scott Wilson”, “Claire Brown”)</li>
+<li><strong>Common locations</strong> (e.g., “Tokyo”, “Moscow”, “Toronto”)</li>
+<li><strong>“Real-world</strong> (i.e., fictional but plausible) organization names (e.g., “BioCore Dynamics”, “NanoSphere Innovations”)</li>
+<li><strong>Fantasy people names</strong> (e.g., “Lyra Marpessa”, “Ganymede Croft”)</li>
+<li><strong>Fantasy organization names</strong> (e.g., “Galeharbor”, “Heagate”)</li>
+<li><strong>Overlaps</strong> (i.e., terms which can be added to a location to form an overlapping organization, like “Times” in “New York Times”) (e.g., “Society”, “College of Art”)
+we then created sentence templates, according to each complexity level and stored the templates in separate JSON files according to tear. Finally, we created a Jupyter notebook (<em>generate_sentences.ipynb</em>) which used Python to load entities from the JSON file and then plugged random entities from the appropriate lists into the templates to generate sentences and corresponding ground-truth annotations. Each tier’s sentences and annotations were saved in separate JSON files for easy inference and comparison.</li>
+</ul>
+<h4 id="summarization-ground-truth-generation-procedure">Summarization Ground-Truth Generation Procedure</h4>
+<p>We provided tier descriptions, contextual details, and sample texts to Copilot and used it to generate additional JSON objects containing input text and ground-truth summary pairs for each complexity tier. The following is an example prompt.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span>
+<span class="line"><span>Tier 1: Simple, descriptive summaries (common) *Goal*: assess models&#39; basic summarization capabilities, using straightforward, real-world content with clear language. *Extract features*: *Language*: simple and direct with clear structure. *Length*: Short (3-5 sentences) *Complexity*: Low; single-topic, factual descriptions. *Sample template*: &quot;{Landmark} is {description} located in {place}. {Built/discovered/founded} in {year}, it is {known for unique feature}. **Example**: *Input*: &quot;The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889, it stands as a global symbol of France. The Eiffel Tower attracts millions of visitors each year.&quot; **Summary**: the Eiffel Tower in Paris, completed in 1889, is a global symbol and popular tourist attraction.&quot; Please give me 40 more inputs/summary pairs like this, as a JSON object with fields for tier, input text, and ground-truth summary, like this: {&quot;tier&quot;: &quot;tier1&quot;, &quot;input_text&quot;: &lt;input_text&gt;, &quot;ground_truth_summary&quot;: &lt;ground_truth_summary&gt; }</span></span>
+<span class="line"><span>|</span></span></code></pre>
+<p>The JSON objects containing input text and summaries were all manually evaluated for suitability and stored in JSON files per tier for later inference and evaluation.</p>
+<h2 id="evaluation-metrics">Evaluation Metrics</h2>
+<p>To comprehensively evaluate model performance, we focused on both task-specific metrics and resource utilization metrics:</p>
+<ul>
+<li><strong>Resource metrics</strong> (all): Runtime, CPU usage, memory usage</li>
+<li><strong>NER performance metrics</strong>: Precision, recall, and F1 score</li>
+<li><strong>Summarization metrics</strong>: ROUGE, BLEU, METEOR, and BERTscore</li>
+</ul>
+<p>The following sections provide more information about the metrics, why they were chosen, and how they were captured.</p>
+<h3 id="resource-metrics">Resource Metrics</h3>
+<ul>
+<li><strong>Runtime</strong> measures the total time taken by a model to process the input data set. Efficient runtime is crucial for applications requiring real-time or near-real-time performance. We used the <strong>time</strong> Python library to capture runtime in inference pipelines.</li>
+<li><strong>CPU usage</strong> captures the percentage of processor resources utilized during model inference. Lower CPU usage indicates a lighter-weight model and, conversely, higher CPU usage indicates a more resource-intensive model. The CPU usage of a particular model may be a limiting factor, depending on the resource constraints of the environment or the size of the data set. We used the <strong>psutil</strong> Python library to capture CPU usage.</li>
+<li><strong>Memory usage</strong> measures the amount of random access memory (RAM) consumed during inference. Models with lower memory footprint are generally better suited for deployment on edge devices or systems with limited resources. We again used the <strong>psutil</strong> Python library to capture CPU usage.</li>
+</ul>
+<h3 id="ner-performance-metrics">NER Performance Metrics</h3>
+<p>We decided to measure the NER models’ performance using a mix of evaluation metrics to give a well-rounded picture. Depending on the use case (and the implications of different errors), teams may wish to favor either precision or recall, or may wish to use the F1 score for a more holistic metric.</p>
+<ul>
+<li><strong>Precision</strong> measures the accuracy of positive predictions, made by the model (“out of all the positive predictions. This model made, how many are actually true?”) in other words, high precision should be prioritized when trying to avoid false positives (for example, in spam detection).
+<ul>
+<li><strong>Equation</strong>: Precision = True Positives (TP) / (TP + False Positives [FP])</li>
+</ul>
+</li>
+<li><strong>Recall</strong>, also known as the <strong>true positive rate</strong> or <strong>sensitivity</strong>, measures the models’ overall completeness in identifying all relevant instances (i.e., minimizing the number of false negatives). High recall is critical in use cases such as medical diagnoses, where overlooking positives is unacceptable.
+<ul>
+<li><strong>Equation</strong>: Recall = TP / (TP + False Negatives [FN])</li>
+</ul>
+</li>
+<li>Precision and recall are inversely linked: a higher precision score results in a lower recall score and vice versa. It can therefore be tricky for teams to know how to weigh them against each other. The <strong>F1 score</strong>, also called the <strong>harmonic mean</strong>, balances precision and recall; thus, it is a good metric in situations where there is not a specific need to prioritize precision or recall.
+<ul>
+<li><strong>Equation</strong>: 2 * (precision * recall) / (precision + recall)</li>
+</ul>
+</li>
+</ul>
+<p>Precision, recall, and F1 scores were all calculated using the <strong>scikit-learn</strong> metrics library in Python.</p>
+<h3 id="summarization-performance-metrics">Summarization Performance Metrics</h3>
+<p>Summarization is a notoriously difficult task for NLP models to perform and is also quite challenging to benchmark. Unlike NER results, which can be easily assessed as positive or negative (i.e., the model either does or does not correctly identify entities and/or their types), results from text generation tasks are stochastic and involve subjective evaluation. Nevertheless, there are several metrics available for researchers to assess text generation tasks like summarization, including Bilingual Evaluation Understudy (<strong>BLEU</strong>), Recall-Oriented  Understudy for Gisting Evaluation (<strong>ROUGE</strong>), Metric for Evaluation of Translation with Explicit Ordering (<strong>METEOR</strong>), and <strong>BERTscore</strong>:</p>
+<ul>
+<li>ROUGE measures the overlap of N-grams between the model’s predicted summary and the ground-truth summary with emphasis on recall. In other words, how many of the words/n-grams in the ground-truth summaries appear in the model generated summaries.</li>
+<li>BLEU provides a score from zero to one comparing how closely a predicted translation matches a reference sentence with emphasis on precision; in other words, how many of the model-generated words/N-grams appear in the ground truth summaries. In addition, BLEU imposes a brevity penalty, which penalizes model results which are shorter than the length of a ground truth reference. (<em>Note: BLEU was originally designed for translation, but is commonly used for other NLP tasks as well.</em>)</li>
+<li>METEOR measures the quality of model-predicted text based on the harmonic mean of unigram precision and recall, with recall weighted higher than precision. It is like the F1 score as it provides a more balanced view than either precision or recall alone.</li>
+<li>BERTscore uses contextual embedding to determine the similarity between ground truth and predicted text so it provides a semantic comparison (meaning to meaning) as opposed to word matching (word to word). While it is good at capturing semantic similarities, it may not provide an indication of the quality of the summary. It is also dependent on the embedding model; fine-tuned models may be required for certain domains.</li>
+</ul>
+<p>ROUGE and BLEU are perhaps the best known evaluation metrics for text generation tasks, but for several reasons, they were not deemed a good fit for this summarization task:</p>
+<ul>
+<li>Measuring the number of exact word matches between ground-truth and predicted text may be a viable strategy for tasks like translation, but not necessarily for summarization. There are many ways of summarizing a given text, and just because the specific words chosen are different, does not indicate that one summary is more accurate than another.</li>
+<li>Similarly, BLEU’s brevity penalty could unfairly penalize models which do a better job of preserving the gist of a text in a concise way – in this case, longer does not necessarily mean better, and should therefore not be preferred.
+BERTScore was deemed to be the best fit for some realization evaluation due to its ability to compare results on a synthetic basis, as opposed to just word by word. BERTScore can be calculated using the <strong>bert_score</strong> library in Python.</li>
+</ul>
+<h2 id="pipeline-setup">Pipeline Setup</h2>
+<p>All of the model pipelines were written in Python and run and tested in Jupyter notebooks. The following sections break down the steps included across model pipelines for NER and summarization tasks.</p>
+<h3 id="ner-pipelines">NER Pipelines</h3>
+<p>The NER model evaluation pipelines for all three models included the following steps:</p>
+<ul>
+<li>Load relevant libraries and define functions to read input files and write results to CSV and JSON</li>
+<li>Extract ground-truth annotations and input sentences from the JSON file</li>
+<li>Create pre- and post-processing functions to:
+<ul>
+<li>Format model predictions to match the ground-truth format (i.e., creating lists of formatted entity predictions including “entity”, “start”, “end”, and “label” values)</li>
+<li>Normalize both ground-truth annotations and model predictions to ensure “apples to apples” comparison, including normalizing capitalization (i.e., making all entries lower-case), stripping leading/trailing white space, and stripping “the” from entities where applicable</li>
+<li><strong>SpaCy only:</strong> map model output labels to ground truth annotation labels (e.g., SpaCy’s “geo-political organization” [GPE] maps to ground-truth “LOC”). See Appendix for full mapping of SpaCy labels to ground-truth annotation labels.</li>
+</ul>
+</li>
+<li>Normalize ground truth annotations</li>
+<li>Record initial memory and CPU usage and start the timer</li>
+<li>Run the NER model over the input sentences, then store formatted and normalized predictions</li>
+<li>Record final resource and runtime metrics and calculate total and average usage</li>
+<li>Match predicted entries with ground-truth annotations, allowing for entity span and type match:
+<ul>
+<li><strong>Exact matches:</strong> Both the span (start and end character offsets) and type (label) match</li>
+<li><strong>Partial matches:</strong> Spans overlap but types are mismatched, and/or spans are incomplete</li>
+<li><strong>False negatives</strong>: Ground-truth entities not predicted by the model</li>
+<li><strong>False positives</strong>: Predicted entities with no corresponding ground-truth match</li>
+</ul>
+</li>
+<li>Calculate evaluation metrics (precision, recall, F1 score) based on matches</li>
+<li>Store the results to CSV and JSON files for further analysis and visualization</li>
+</ul>
+<h3 id="summarization-pipelines">Summarization Pipelines</h3>
+<p><strong>Note:</strong> During the testing phase, we observed that the chosen models predominantly produced extractive summaries. <strong>As the primary goal of the evaluation was to assess abstractive summarization capabilities, these models were deemed unsuitable for the desired task.</strong></p>
+<p>The input pre-processing and model inference steps were implemented as planned, focusing on ensuring compatibility with each model’s tokenization and decoding requirements. However, the outputs consistently aligned more closely with extractive rather than abstractive summarization (i.e., copying text word-for-word). These results are detailed in the Results and Discussion: Summarization Models section.</p>
+<p>Given the divergence between model outputs and the project’s intended focus, we elected not to proceed with detailed metrics evaluation for the summarization task. This decision enabled us to redirect efforts towards refining the methodology for future work. This overall finding underscores the importance of aligning model capabilities with task requirements in early project stages.</p>
+<h1 id="results-and-discussion">Results and Discussion</h1>
+<p>The following sections outline the performance of the chosen NLP models across the six input tiers, followed by an evaluation of their relative strengths and limitations.</p>
+<h2 id="ner-models-1">NER Models</h2>
+<h3 id="results">Results</h3>
+<h4 id="performance-metrics">Performance Metrics</h4>
+<p>As predicted in the Methodology: NER Models section, SpaCy proved to be the lightest-weight, least resource intensive, and fastest model, followed by DistilBERT and BERT. SpaCy easily outpaces both transformer-based models in terms of runtime and memory usage:</p>
+<ul>
+<li>SpaCy was consistently faster, with an average runtime of 0.18s per tier and lower memory usage at 0.76MB.</li>
+<li>BERT and DistilBERT both showed significantly higher runtime (with averages of 1.41s and 0.74s, respectively) and greater memory consumption (averaging 326MB and 164MB respectively).</li>
+</ul>
+<p>These results track with expectations, as SpaCy is a lighter-weight model with a simpler architecture compared to the transformer-based BERT and DistilBERT, which are computationally more intensive. These resource differences are particularly important when selecting a model for environments with limited computational power or where real time performance is crucial, such as edge devices or systems with strict latency requirements. The size and runtime of the models may be a particular concern for users desiring to deploy a model locally on a laptop, as in this experiment.</p>
+<h4 id="average-runtime">Average Runtime</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input File</th><th>bert</th><th>distilbert</th><th>spacy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>1.44</td><td>0.71</td><td>0.16</td></tr><tr><td>tier_2_sentences</td><td>1.40</td><td>0.75</td><td>0.20</td></tr><tr><td>tier_3_sentences</td><td>1.52</td><td>0.76</td><td>0.18</td></tr><tr><td>tier_4_sentences</td><td>1.43</td><td>0.80</td><td>0.18</td></tr><tr><td>tier_5_sentences</td><td>1.28</td><td>0.70</td><td>0.16</td></tr><tr><td>tier_6_sentences</td><td>1.38</td><td>0.69</td><td>0.20</td></tr></tbody></table>
+<h4 id="average-memory-usage">Average Memory Usage</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input File</th><th>bert</th><th>distilbert</th><th>spacy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>326.76</td><td>164.54</td><td>0.28</td></tr><tr><td>tier_2_sentences</td><td>327.19</td><td>165.18</td><td>1.68</td></tr><tr><td>tier_3_sentences</td><td>324.56</td><td>164.61</td><td>0.52</td></tr><tr><td>tier_4_sentences</td><td>326.74</td><td>164.81</td><td>0.67</td></tr><tr><td>tier_5_sentences</td><td>325.44</td><td>164.06</td><td>0.55</td></tr><tr><td>tier_6_sentences</td><td>326.33</td><td>166.40</td><td>0.88</td></tr></tbody></table>
+<h4 id="average-cpu-usage">Average CPU Usage</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input File</th><th>bert</th><th>distilbert</th><th>spacy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>31.51</td><td>34.23</td><td>7.44</td></tr><tr><td>tier_2_sentences</td><td>33.63</td><td>31.96</td><td>3.85</td></tr><tr><td>tier_3_sentences</td><td>31.70</td><td>33.86</td><td>6.93</td></tr><tr><td>tier_4_sentences</td><td>34.16</td><td>32.83</td><td>3.78</td></tr><tr><td>tier_5_sentences</td><td>37.71</td><td>30.13</td><td>3.78</td></tr><tr><td>tier_6_sentences</td><td>32.29</td><td>32.37</td><td>2.57</td></tr></tbody></table>
+<h4 id="averages-per-model">Averages Per Model</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Averages Per Model</th><th>Precision</th><th>Recall</th><th>F1 Score</th><th>Runtime</th><th>Memory Usage</th><th>CPU Usage</th></tr></thead><tbody><tr><td>BERT</td><td>0.877</td><td>0.945</td><td>0.908</td><td>1.408</td><td>326.170</td><td>33.500</td></tr><tr><td>DistilBERT</td><td>0.887</td><td>0.963</td><td>0.922</td><td>0.735</td><td>164.933</td><td>32.563</td></tr><tr><td>SpaCy</td><td>0.773</td><td>0.877</td><td>0.8118</td><td>0.180</td><td>0.763</td><td>4.725</td></tr></tbody></table>
+<h4 id="accuracy-metrics">Accuracy metrics</h4>
+<p>As anticipated there was a distinct trade-off between resource consumption and accuracy among the selected N ER models. Although SpaCy outperformed the transformers in terms of speed and resource efficiency, its F1 score (the harmonic mean of precision and recall) was lower than both BERT and DistilBERT. As noted in the NER Performance Metrics section, the F1 score is a balanced metric between precision and recall, and thus provides a good indicator of overall model performance:</p>
+<ul>
+<li>SpaCy had an average F1 score of 0.818, which is notably lower than either BERT (0.908) or DistilBERT (0.922).</li>
+<li>In addition to outperforming SpaCy, DistilBERT actually also outperformed its brawnier older brother in both precision and recall (and therefore F1 score), with the following averages:
+<ul>
+<li>BERT: Precision = 0.87; Recall = 0.945; F1 Score = 0.908</li>
+<li>DistilBERT: Precision = 0.887; Recall = 0.963; F1 Score = 0.922</li>
+</ul>
+</li>
+</ul>
+<p>This makes DistilBERT the most accurate model across the board for this use case, while also being considerably more resource-efficient than BERT.</p>
+<h4 id="error-analysis">Error Analysis</h4>
+<p>In addition to evaluation metrics, we reviewed the actual errors resulting from comparing the models’ outputs to ground-truth annotation. Error analysis is crucial for achieving a more holistic understanding of the models’ performance: a high F1 score may initially indicate that an NER model is performing well numerically, but without examining the errors themselves, teams risk missing subtle but critical insights into the patterns of model output that can lead to false negatives or false positives. In other words, certain types of model output may be valid for a team’s requirements even if technically considered an “error” strictly in terms of precision/recall calculation; likewise, the calculations for accuracy metrics themselves may be distorted.</p>
+<p>In analyzing the chosen models’ outputs against ground-truth annotations, we observed several types of recurring error which highlight the complexity of automated entity extraction. The following sections provide more detail about each type of error and potential impacts.</p>
+<h5 id="span-mismatches">Span mismatches</h5>
+<p>In the majority of cases (63%), errors resulted from span mismatches (as opposed to semantic type mismatches, e.g., <em>PER</em>, <em>ORG</em>, and <em>LOC</em>). These span mismatches included several sub-types:</p>
+<ul>
+<li><strong>Title omission</strong>: the models frequently omitted honorifics, titles, and/or prefixes, such as <em>Dr., Captain, Lady,</em> and <em>Sir</em> (e.g., <em>Captain Rainald Quarriman</em> vs <em>Rainald Quarriman</em>). In some applications (e.g., historical records, address fields), missing a title may alter the meaning. Removing sections of a name (especially if inconsistently) may also introduce duplicate entities in post-inference pipelines. In casual applications, however, honorifics and titles may be an acceptable omission.</li>
+<li><strong>Multi-word splitting</strong>: the models sometimes incorrectly, segmented named entities into separate words, treating multi-word locations and proper names as two entities instead of one. As anticipated, the “overlap” nested entity types (e.g., <em>Lanius College of Medicine</em>) comprised a significant percentage of the errors, and fantasy names also proved difficult for the models to parse. For location-based services, missing the full entity span might lead to incorrect mappings (e.g., distinguishing <em>New York</em> from <em>York</em>).</li>
+<li><strong>Article omission</strong>: DilstilBERT in particular sometimes attempted to classify the definite article (<em>the</em>) from fantasy sentences, separate from the actual entity identified in the ground-truth annotation (e.g., <em>the Frostwolf clan</em>). Post-processing could check for predicted entities that consist solely of articles.</li>
+<li><strong>Punctuation and spacing errors</strong> (e.g., <em>Araven Grey-Gull</em> vs <em>Araven Grey - Gull</em>): the models occasionally inserted unwanted spaces around punctuation, resulting in false positives and negatives.</li>
+</ul>
+<p>Beyond being qualitative concern, span mismatches have a quantify effect on the calculated precision, recall, and F1 score. The way that errors propagate through the scoring system can obscure the actual type-level performance of the model, making it appear either worse or better than it really is. For example, given the following ground-truth entity and model prediction:</p>
+<ul>
+<li><strong>Ground-truth entity</strong>: <em>Captain Rainald Quarriman (PER)</em></li>
+<li><strong>Model prediction:</strong> <em>Rainald Quarriman (PER)</em></li>
+</ul>
+<p>As designed, our model pipeline designated an output as a false positive if the model predicted an entity which was also present in the ground-truth annotation, and a false negative if the model failed to predict an entity present in the ground truth. The omission of <em>Captain</em> therefore resulted in <strong>both</strong> a false negative <strong>and</strong> a false positive error:</p>
+<ul>
+<li><strong>False negative</strong> (FN): <em>Captain Rainald Quarriman</em> was <strong>not</strong> fully predicted.</li>
+<li><strong>False positive</strong> (FP): <em>Rainald Quarriman</em> was predicted, but <strong>does not exactly match</strong> the ground-truth.</li>
+</ul>
+<p>Thus, precision and recall calculations both suffer:</p>
+<ul>
+<li><strong>Precision</strong> (correct predictions / all predictions) <strong>decreases</strong> because the model produced a spurious entry.</li>
+<li><strong>Recall</strong> (correct predictions / ground-truth entities) <strong>decreases</strong> because the model failed to identify the whole entity.</li>
+</ul>
+<p>If these kinds of span mismatches are frequent, the overall evaluation metrics are skewed downward, but not because the model was truly bad at recognizing entities, but due to misalignment with annotation granularity.</p>
+<p>A secondary consequence of span mismatches dominating the error field is that “actual” false positives and false negatives (e.g., identifying <em>several years</em> or failing to identify the organization <em>Dragon’s Claw</em>), as well as type mismatches (e.g., <em>Paris [LOC]</em> labeled as a <em>PER</em>) may be drowned out. If 80% of a models errors are span mismatches, the dominant signal in the confusion matrix will be false-positive and -negative noise from span issues, making true type confusion harder to detect. Thus, span errors not only artificially lower F1 scores, but they also obscure meaningful insights into model behavior, making debugging harder.</p>
+<h5 id="f1-scores">F1 Scores</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input file</th><th>Bert</th><th>DistilBERT</th><th>SpaCy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>0.97</td><td>0.96</td><td>0.95</td></tr><tr><td>tier_2_sentences</td><td>0.90</td><td>0.88</td><td>0.78</td></tr><tr><td>tier_3_sentences</td><td>0.98</td><td>1.00</td><td>0.93</td></tr><tr><td>tier_4_sentences</td><td>0.92</td><td>0.92</td><td>0.67</td></tr><tr><td>tier_5_sentences</td><td>0.87</td><td>0.89</td><td>0.84</td></tr><tr><td>tier_6_sentences</td><td>0.81</td><td>0.88</td><td>0.74</td></tr></tbody></table>
+<h5 id="precision">Precision</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input file</th><th>Bert</th><th>DistilBERT</th><th>SpaCy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>0.97</td><td>0.97</td><td>0.93</td></tr><tr><td>tier_2_sentences</td><td>0.86</td><td>0.83</td><td>0.71</td></tr><tr><td>tier_3_sentences</td><td>0.98</td><td>1.00</td><td>0.92</td></tr><tr><td>tier_4_sentences</td><td>0.89</td><td>0.87</td><td>0.61</td></tr><tr><td>tier_5_sentences</td><td>0.82</td><td>0.83</td><td>0.78</td></tr><tr><td>tier_6_sentences</td><td>0.74</td><td>0.82</td><td>0.69</td></tr></tbody></table>
+<h5 id="recall">Recall</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Input file</th><th>Bert</th><th>DistilBERT</th><th>SpaCy</th></tr></thead><tbody><tr><td>tier_1_sentences</td><td>0.97</td><td>0.96</td><td>0.97</td></tr><tr><td>tier_2_sentences</td><td>0.95</td><td>0.94</td><td>0.87</td></tr><tr><td>tier_3_sentences</td><td>0.98</td><td>1.00</td><td>0.95</td></tr><tr><td>tier_4_sentences</td><td>0.96</td><td>0.98</td><td>0.75</td></tr><tr><td>tier_5_sentences</td><td>0.92</td><td>0.96</td><td>0.91</td></tr><tr><td>tier_6_sentences</td><td>0.89</td><td>0.94</td><td>0.81</td></tr></tbody></table>
+<h3 id="interpretation-and-discussion">Interpretation and Discussion</h3>
+<h4 id="importance-of-error-analysis-vs-numerical-metrics">Importance of error analysis vs. numerical metrics</h4>
+<p>One of the biggest takeaways from the experiment was the importance of error analysis beyond numerical metrics. Despite relatively high F1 scores of the outset, span errors, discovered on further review highlight the need for human validation, and model evaluation. Instead of blindly, trusting precision and recall, a deeper qualitative assessment reveals:</p>
+<ul>
+<li>Which errors are trivial versus critical based on the use case (does your use case require perfect entity spans? Are omissions like titles or honorifics acceptable?)</li>
+<li>Whether post-processing rules could be used to enhance real-world usability</li>
+</ul>
+<p>Thus, teams should be aware that accepting metrics such as F1-score on face value without error inspection may lead to misleading conclusions about their model’s performance, and/or mask underlying issues (in this case, “actual” type mismatches versus errors caused by span mismatches). To combat these issues, teams should consider augmenting metrics with error categorization, adopt case-specific metric adjustments, and leverage visualizations such as heat maps to highlight systemic patterns.</p>
+<h5 id="model-performance-comparison">Model performance comparison</h5>
+<p>Any organization wishing to select one of the given models for an NER task will have unique requirements concerning efficiency and accuracy. Given these results, we identified the following key takeaways which teams should consider when choosing one of these models:</p>
+<ul>
+<li><strong>SpaCy</strong> is the best choice of these models when resource efficiency is a priority, such as in environments with constrained or limited hardware or on edge devices. While its accuracy is lower than that of the transformer-based models, it still provides reasonable precision and recall, making it suitable for tasks for speed and memory usage are the main factors being considered. (Its easy integration with Python workflows is also likely to be an asset in these cases.)</li>
+<li><strong>DistilBERT</strong> is the most balanced option, providing near-state-of-the-art performance (indeed, outcompeting BERT) on its F1 score and a significantly reduced resource cost compared to BERT. It strikes a balance between performance and computational cost, making it a strong candidate for general-purpose NER tasks, and especially in scenarios where both speed and accuracy are important but where classic-BERT’s resource consumption may be a drawback.</li>
+<li><strong>BERT</strong> provides similar accuracy to DistilBERT, but comes at the cost of much greater resource consumption. While it may be usable in situations where computational resources are abundant, BERT is likely to be overkill in resource-constrained environments, and that without a corresponding increase in precision or recall.</li>
+<li><strong>In all cases, proper tas, identification, scoping, pre-processing, and normalization of the data is crucial to getting decent results</strong>. It is also critical for teams to spend time familiarizing themselves with the particular nuances and architecture that their selected model is built on, as this has implications for the output and results (e.g., accounting for differences in how models “chunk” entities, or differences in available tags, etc.).</li>
+</ul>
+<h2 id="summarization-models-1">Summarization Models</h2>
+<h3 id="performance">Performance</h3>
+<p>As mentioned in the Summarization Pipelines section, during preliminary testing we observed that the chosen models consistently failed to produce summaries that aligned with the ground-truth summaries: in some cases, the models simply repeated the input text word-for-word or even added text, while in other instances, they repeated incomplete chunks of the input text or simply hallucinated. The following table provides details of models’ predictions per tier and how they compare to the ground-truth summaries.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Model</th><th>Sentence Tier</th><th>Test Input</th><th>Ground-Truth Summary</th><th>Model Output</th><th>Result</th></tr></thead><tbody><tr><td>BART</td><td>1</td><td>The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889, it stands as a global symbol of France. It attracts millions of visitors each year.</td><td>The Eiffel Tower in Paris, completed in 1889, is a global symbol and popular tourist attraction.</td><td>The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889. It stands as a global symbol of France. It attracts millions of visitors each year and is a UNESCO World Heritage Site. The tower is made of wrought iron and was completed in 1889.</td><td>Verbatim repetition of input, with additional remarks</td></tr><tr><td>BART</td><td>2</td><td>The Umbrite cavern in Isenfell glows with an otherworldly light as the arcane ores shimmer in hues of violet and blue. It was discovered in 267. The Umbrite Cavern remains a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>The Umbrite Cavern in Isenfell, discovered in 267, is a mysterious site said to grant visions to adventurers.</td><td>The Umbrite Cavern in Isenfell glows with an otherworldly light as the arcane ores shimmer in hues of violet and blue. It was discovered in 267 and has long been a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>Near-verbatim repetition of input</td></tr><tr><td>BART</td><td>3</td><td>The CRISPR-Cas9 gene-editing tool allows researchers to make precise modifications to DNA. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. Despite its promise, ethical concerns regarding use in human embryos remain a topic of intense debate.</td><td>CRISPR-Cas9 enables precise DNA editing, offering potential cures for genetic disorders but raising ethical concerns.</td><td>The CRISPR-Cas9 gene-editing tool allows researchers to make precise modifications to DNA. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. Despite its promise, ethical concerns regarding use in human embryos remain a topic of intense debate.</td><td>Verbatim repetition of input</td></tr><tr><td>BART</td><td>4</td><td>The Arcane Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled unprecedented advancements in transportation and defense. However, prolonged exposure to aether waves is known to cause delirium, leading to a condition which scholars have termed “arcane decay”.</td><td>The Arcane Conductor channels aether energy to power city infrastructure, but poses risks of ‘arcane decay’ from long exposure.</td><td>The Arcane Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled unprecedented advancements in transportation and defense. But prolonged exposure to aether waves is known to cause delirium, leading to a condition which scholars have termed “arcane decay”.</td><td>Near-verbatim repetition of input</td></tr><tr><td>BART</td><td>5</td><td>The city council debated the budget proposal for weeks. After much deliberation, they decided to allocate more funds to public transportation to reduce traffic congestion. This decision was met with approval from environmental groups. However, local businesses voiced concerns about potential tax increases to cover the new expenses. As a result, the council adjusted the plan to balance both interests.</td><td>The city council approved more funding for public transport to cut traffic, after getting support from environmental groups and addressing business concerns with budget adjustments.</td><td>The city council debated the budget proposal for weeks. They decided to allocate more funds to public transportation to reduce traffic congestion. This decision was met with approval from environmental groups. Local businesses voiced concerns about potential tax increases to cover the new expenses. As a result, the council adjusted the plan to balance both interests.</td><td>Near-verbatim repetition of input</td></tr><tr><td>BART</td><td>6</td><td>The Royal Forest Guardians decided to implement a new enchantment strategy to protect endangered magical creatures. This strategy was developed after extensive research and collaboration with local sorcerers and druids. Elven councils praised the initiative for its potential to preserve magical biodiversity. However, villagers were concerned about restrictions on land use and the potential impact on their livelihoods. To address these concerns, the Guardians included provisions for sustainable land use practices that benefit both conservation and local livelihoods.</td><td>The Royal Forest Guardians implemented a new enchantment strategy to protect endangered creatures, after collaborating with sorcerers and addressing villager concerns with sustainable practices.</td><td>The Royal Forest Guardians decided to implement a new enchantment strategy to protect endangered magical creatures. This strategy was developed after extensive research and collaboration with local sorcerers and druids. Elven councils praised the initiative for its potential to preserve magical biodiversity. However, villagers were concerned about restrictions on land use and the potential impact on their livelihoods.</td><td>Verbatim repetition of input, with omission of last sentence/outcome</td></tr><tr><td>T5</td><td>1</td><td>The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889, it stands as a global symbol of France. It attracts millions of visitors each year.</td><td>The Eiffel Tower in Paris, completed in 1889, is a global symbol and popular tourist attraction.</td><td>, the Eiffel Tower was one of France’s most famous cathedral-inspired buildings, including the Eiffel Tower.</td><td>Fragmented/disjointed output; lack of logical flow</td></tr><tr><td>T5</td><td>2</td><td>The Umbrite cavern in Isenfell glows with an otherworldly light as the arcane ores shimmer in hues of violet and blue. It was discovered in 267. The Umbrite Cavern remains a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>The Umbrite Cavern in Isenfell, discovered in 267, is a mysterious site said to grant visions to adventurers.</td><td>in 267 and was discovered in 267. The Umbrite Cavern - an Isenfell, is a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>Fragmented/disjointed output; lack of logical flow</td></tr><tr><td>T5</td><td>3</td><td>The CRISPR-Cas9 gene-editing tool allows researchers to make precise modifications to DNA. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. Despite its promise, ethical concerns regarding use in human embryos remain a topic of intense debate.</td><td>CRISPR-Cas9 enables precise DNA editing, offering potential cures for genetic disorders but raising ethical concerns.</td><td>-editing tool lets scientists make precise modifications to DNA. The tool allows scientists to modify the DNA sequence automatically with precise gene modifications. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. ethical concerns relative to use in embryos remains a topic of intense debate.</td><td>Fragmented/disjointed output; lack of logical flow; hallucination (insertion of <em>automatically</em>)</td></tr><tr><td>T5</td><td>4</td><td>The Arcane Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled unprecedented advancements in transportation and defense. However, prolonged exposure to aether waves is known to cause delirium, leading to a condition which scholars have termed “arcane decay”.</td><td>The Arcane Conductor channels aether energy to power city infrastructure, but poses risks of ‘arcane decay’ from long exposure.</td><td>Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled even more advancements in transportation and defense. long exposure to aether waves is known to cause delerium, leading to a condition known to cause delerium.</td><td>Fragmented/disjointed output; lack of logical flow</td></tr><tr><td>T5</td><td>5</td><td>The city council debated the budget proposal for weeks. After much deliberation, they decided to allocate more funds to public transportation to reduce traffic congestion. This decision was met with approval from environmental groups. However, local businesses voiced concerns about potential tax increases to cover the new expenses. As a result, the council adjusted the plan to balance both interests.</td><td>The city council approved more funding for public transport to cut traffic, after getting support from environmental groups and addressing business concerns with budget adjustments.</td><td>on budget eradications. for weeks by city council. The council decided to allocate more federal funds to rail to ease congestion. It was met with approval from environmental groups.</td><td>Fragmented/disjointed output; lack of logical flow; hallucination (<em>budget eradications, federal funds to rail</em>); omission of latter half/conclusion</td></tr><tr><td>T5</td><td>6</td><td>The Royal Forest Guardians decided to implement a new enchantment strategy to protect endangered magical creatures. This strategy was developed after extensive research and collaboration with local sorcerers and druids. Elven councils praised the initiative for its potential to preserve magical biodiversity. However, villagers were concerned about restrictions on land use and the potential impact on their livelihoods. To address these concerns, the Guardians included provisions for sustainable land use practices that benefit both conservation and local livelihoods.</td><td>The Royal Forest Guardians implemented a new enchantment strategy to protect endangered creatures, after collaborating with sorcerers and addressing villager concerns with sustainable practices.</td><td>for forests announced last month that an organization had planned about 20 hectares of wilderness. A groves of forest, some villagers feared restrictions on land use before they could exploit a wild land conservation strategy.</td><td>Fragmented/disjointed output; lack of logical flow; hallucination (<em>20 hectares of wilderness, villagers exploit wild land…strategy</em>); omission of latter half/conclusion</td></tr><tr><td>Pegasus</td><td>1</td><td>The Eiffel Tower is a wrought-iron lattice tower located in Paris, France. Completed in 1889, it stands as a global symbol of France. It attracts millions of visitors each year.</td><td>The Eiffel Tower in Paris, completed in 1889, is a global symbol and popular tourist attraction.</td><td>All images are copyrighted.</td><td>Complete hallucination; no relevance to input text</td></tr><tr><td>Pegasus</td><td>2</td><td>The Umbrite cavern in Isenfell glows with an otherworldly light as the arcane ores shimmer in hues of violet and blue. It was discovered in 267. The Umbrite Cavern remains a mysterious attraction for adventurers drawn by its supposed power to grant mystical visions.</td><td>The Umbrite Cavern in Isenfell, discovered in 267, is a mysterious site said to grant visions to adventurers.</td><td>One of the UK’s most spectacular caves has been revealed to the public for the first time.</td><td>Complete hallucination; <em>UK</em> not mentioned at all in input text</td></tr><tr><td>Pegasus</td><td>3</td><td>The CRISPR-Cas9 gene-editing tool allows researchers to make precise modifications to DNA. This technology has revolutionized genetic research, enabling scientists to edit out harmful genes and potentially cure genetic disorders. Despite its promise, ethical concerns regarding use in human embryos remain a topic of intense debate.</td><td>CRISPR-Cas9 enables precise DNA editing, offering potential cures for genetic disorders but raising ethical concerns.</td><td>The world’s first embryos have been created using a new gene-editing technology.</td><td>Hallucination (<em>world’s first human embryos have been created</em>); omits tool details and pros/cons/conclusion</td></tr><tr><td>Pegasus</td><td>4</td><td>The Arcane Conductor allows celestiologists to channel raw aether energy to power the city’s floating towers. This breakthrough has enabled unprecedented advancements in transportation and defense. However, prolonged exposure to aether waves is known to cause delirium, leading to a condition which scholars have termed “arcane decay”.</td><td>The Arcane Conductor channels aether energy to power city infrastructure, but poses risks of ‘arcane decay’ from long exposure.</td><td>Researchers at the Massachusetts Institute of Technology (MIT) have developed a new type of Conductor that harnesses the power of aether waves.</td><td>Hallucination (<em>Massachusetts Institute of Technology</em>); omits tool details and pros/cons/conclusion</td></tr><tr><td>Pegasus</td><td>5</td><td>The city council debated the budget proposal for weeks. After much deliberation, they decided to allocate more funds to public transportation to reduce traffic congestion. This decision was met with approval from environmental groups. However, local businesses voiced concerns about potential tax increases to cover the new expenses. As a result, the council adjusted the plan to balance both interests.</td><td>The city council approved more funding for public transport to cut traffic, after getting support from environmental groups and addressing business concerns with budget adjustments.</td><td>A new budget has been approved for the city of Portland, Oregon.</td><td>Hallucination (<em>city of Portland, Oregon</em>); omits tool details and pros/cons/conclusion</td></tr><tr><td>Pegasus</td><td>6</td><td>The Royal Forest Guardians decided to implement a new enchantment strategy to protect endangered magical creatures. This strategy was developed after extensive research and collaboration with local sorcerers and druids. Elven councils praised the initiative for its potential to preserve magical biodiversity. However, villagers were concerned about restrictions on land use and the potential impact on their livelihoods. To address these concerns, the Guardians included provisions for sustainable land use practices that benefit both conservation and local livelihoods.</td><td>The Royal Forest Guardians implemented a new enchantment strategy to protect endangered creatures, after collaborating with sorcerers and addressing villager concerns with sustainable practices.</td><td>The Royal Forest is one of the world’s most important habitats for rare and endangered species.</td><td>Hallucination (<em>one of the world’s most important habitats</em>); omits tool details and pros/cons/conclusion</td></tr></tbody></table>
+<h3 id="interpretation-and-discussion-1">Interpretation and Discussion</h3>
+<p>All of the chosen models struggled with the summarization task, each in different ways:</p>
+<ul>
+<li><strong>BART</strong> mostly repeated the input text verbatim, and occasionally <em>added</em> details (e.g., the Eiffel Tower being a UNESCO World Heritage site and being made of wrought iron). The exception was for tier 6, which was intended to test models’ ability to summarize texts with cause and effect relationships and logical flow. In this case, BART repeated most of the input verbatim with the exception of the final sentence, which contained the logical outcome from the input (arguably the most important detail!).</li>
+<li><strong>T5</strong> produced, disjointed fragmented output; these fragments appeared to be slightly altered versions of the original text, peace back together in ways, which did not make sense either semantically or syntactically (e.g., <em>, the Eiffel Tower was one of France’s most famous cathedral-inspired buildings, including the Eiffel Tower</em>). T5 also hallucinated some details, particularly as the input texts grew more complex (i.e., Tiers 3, 5, and 6, which featured more technical jargon and logical flow, all had hallucinated details). Similarly to BART, T5 also omitted important nuance from it summaries of Tiers 5 and 6, which resulted in its failing to capture the logical conclusions of the texts.</li>
+<li><strong>Pegasus</strong> produced the starkest deviations from the input and ground-truth summaries: it hallucinated details in every tier, as well as entirely omitting pros, cons, and conclusions from the more complex input tiers. Most surprisingly, in Tiers 1 and 2 (designed to be straightforward input texts), the model produced completely fabricated output text (e.g., “All images are copyrighted”).</li>
+</ul>
+<p>Given the complexity of these models, it is difficult to pinpoint an exact cause for the differences and expected outcome versus the actual predicted results. These misfires do, however, indicate a general underlying mismatch between this experiment’s design and the selected models’ design/intended use cases. There are several factors which may have contributed to or combined to contribute to this gap:</p>
+<ul>
+<li>The input texts may have been too short for the models to effectively parse. This may be because the models used for this experiment were pre-trained on datasets which featured longer input texts (e.g., BART was pre-trained on the “CNN/Daily Mail” dataset, which is comprised of news articles from CNN and the Daily Mail; Pegasus was pre-trained on the HugeNews and C4 “Common Crawl” datasets, which feature text from news articles and webpages, respectively).</li>
+<li>The models’ pre-training may have primed them for a different kind of domain specificity (i.e., journalism/news reporting) than that contained in the input text. Pegasus’ hallucination of “all images are copyrighted”, for example, seems to support this theory.</li>
+<li>The task itself (and input/ground-truth summaries) was poorly designed/enunciated for NLP models. Specifically the task of “summarization” was overly general, and the ground truth summaries were more like “paraphrasing” as opposed to “true summarization” from the perspective of a machine learning/NLP task.</li>
+</ul>
+<p>On review, there were several assumptions made at the start of this experiment which would need to be thoroughly questioned in any future experimentation:</p>
+<ul>
+<li><strong>Is the proposed task actually aligned with NLP/summarization?</strong> “Summarization” in NLP parliament refers to a quite specific (and difficult!) task; namely, either extracting key phrases from a longer text (i.e., extractive summarization) or generating a new text containing the key ideas from an input text (abstractive summarization). It is crucial for teams to very carefully research and consider the exact task they are expecting the models to perform: “summarization” can mean different things to different humans, which may not neatly align with one of the two specific flavors of NLP summarization.</li>
+<li><strong>Is the selected model a good match for the defined task? What kind of input does the model “expect”?</strong> this experiment, attempted to evaluate summarization models based on criteria like runtime, resource consumption, and prediction accuracy; however, future studies should take a step back and consider more foundational aspects of model suitability before proceeding. In particular, teams should first consider a models pre-training (eg., the data set it has been trained on), examining elements like input length and domain specificity to ensure a good match for the intended use case. Bigger and more complex models like ChatGPT and Claude maybe better able to generalize and “figure it out” but the smaller a model is, the more precisely it needs to be aligned with the proposed task to ensure a desirable result.</li>
+<li><strong>Is the tradeoff worth it?</strong> a key take away from this experiment is that, even assuming that a model works perfectly as intended out of the box, the amount of effort and time required to research design tests, and evaluate performance may/likely will exceed to the potential resource and cost savings (in this case, none!). This experiment was initially conceived with the assumption that a given team would have limited resources available to deploy and run the models; in that case, it is safe to say that, even assuming it was possible to retrain the models for better performance, the “juice isn’t worth the squeeze”.</li>
+</ul>
+<p>Overall, the poor performance of the selected summarization models on the given tasks, does not indicate that the models are “bad at summarization”, but rather illustrates the critical importance of research and level setting at the start of a project to ensure that the right tool is being selected for the job. Likewise, it is non-negotiable for teams to conduct robust needs analysis to validate that the task is a good fit for summarization and NLP in the first place.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>This study underscores the importance of model selection in NLP tasks, particularly when balancing accuracy with resource consumption. In the case of NER, SpaCy emerges as the optimal choice when computational efficiency is paramount, particularly in environments with limited resources or when speed is crucial. However, for more demanding applications requiring higher accuracy, DistilBERT strikes the best balance, offer offering near-state-of-the-art performance with reduced computational cost compared to BERT. On the other hand, BERT remains a strong contender where computational resources are not a concern, though it may be an over-engineered solution for smaller-scale tasks.</p>
+<p>For summarization, however, the results were less favorable. The models tested (BART, T5, and Pegasus) struggled with the tasks in various ways, pointing to a misalignment between the design of the models and the nature of the summarization task. These misfires highlight the critical importance of aligning model capabilities with task requirements, especially when using pre-trained models. Moreover, the findings suggest that, while summarization tasks can be complex and nuanced, the models selected in this study, may not be the most appropriate for certain types of content or use cases.</p>
+<p>Overall, this research demonstrates the necessity of thorough task analysis and model selection; it is critical above all for teams to carefully assess whether NLP summarization is a suitable approach for their needs, and to consider more tailored models for their specific applications.</p>
+<p>Further, this experiment had an extremely limited scope in terms of training/fine-tuning (i.e., none) - in reality, it is vanishing, unlikely that a model would perform a specification out of the box. Any real world application would certainly require significant time and resources (including domain expertise, as well as expertise in data engineering, analysis, and operations) to ensure that it is production ready, not to mention for ongoing monitoring and maintenance. Future teams considering NLP models for production workflows will need to carefully weigh not just the costs of needs analysis, exploratory data analysis, model research, model selection, training, testing, and deployment, but also fine-tuning, retraining, and ongoing support. “Set it, and forget it” does not apply to an NLP solution, and the projected level of effort must take this into account.</p>
+<h1 id="references">References</h1>
+<ol>
+<li>“Linguistic Features: SpaCy Usage Documentation.” Linguistic Features. Accessed December 31, 2024. <a href="https://spacy.io/usage/linguistic-features#named-entities">https://spacy.io/usage/linguistic-features#named-entities</a></li>
+<li>SpaCy 101: Everything you need to know. “spaCy 101: Everything You Need to Know - spaCy Usage Documentation.” Accessed October 30, 2024. <a href="https://spacy.io/usage/spacy-101">https://spacy.io/usage/spacy-101</a></li>
+<li>“BERT 101 - State of the Art NLP Model Explained.” n.d. Accessed December 31, 2024. <a href="https://huggingface.co/blog/bert-101">https://huggingface.co/blog/bert-101</a></li>
+<li>“BERT.” n.d. Accessed December 31, 2024. <a href="https://huggingface.co/docs/transformers/model_doc/bert">https://huggingface.co/docs/transformers/model_doc/bert</a></li>
+<li>Sanh, Victor. “Smaller, Faster, Cheaper, Lighter: Introducing DistilBERT, a Distilled Version of BERT.” HuggingFace (blog), August 31, 2020. <a href="https://medium.com/huggingface/distilbert-8cf3380435b5">https://medium.com/huggingface/distilbert-8cf3380435b5</a></li>
+<li>“BART”. n.d. Accessed November 13, 2024. <a href="https://huggingface.co/docs/transformers/model_doc/bart">https://huggingface.co/docs/transformers/model_doc/bart</a></li>
+<li>“How Do Transformers Work? - HuggingFace NLP Course.” n.d. Accessed December 31, 2024. <a href="https://huggingface.co/learn/nlp-course-chapter1/4">https://huggingface.co/learn/nlp-course-chapter1/4</a></li>
+<li>“How Do Transformers Work? - HuggingFace NLP Course.” n.d. Accessed December 31, 2024. <a href="https://huggingface.co/learn/nlp-course-chapter1/4">https://huggingface.co/learn/nlp-course-chapter1/4</a></li>
+<li>“Pegasus.” n.d. Accessed December 31, 2024. <a href="https://huggingface.co.docs/transformers/model_doc/pegasus">https://huggingface.co.docs/transformers/model_doc/pegasus</a></li>
+<li>Zhang, Jinqing, Yao Zhao, Mohammed Saleh, and Peter J. Liu. 2020. “PEGASUS: Pre-Training with Extracted Gap-Sentences for Abstractive Summarization.” arXiv. <a href="https://doi.org/10.48550/arXiv.1912.08777">https://doi.org/10.48550/arXiv.1912.08777</a>.</li>
+<li>“Monitoring Text-Based Generative AI Models Using Metrics like BLEU Score.” n.d. Arize AI. Accessed January 2, 2025. <a href="https://arize.com/blog-course/generative-ai-metrics-bleu-score">https://arize.com/blog-course/generative-ai-metrics-bleu-score</a></li>
+<li>LaVi, iiTAN. 2016. “Answer to ‘Text Summarization Evaluation - BLEU vs ROUGE.’” Stack Overflow. <a href="https://stackoverflow.com/a/39190391">https://stackoverflow.com/a/39190391</a></li>
+<li>“Abisee/Cnn_dailymail - Datasets at HuggingFace.” 2024. February 13, 2024. <a href="https://huggingface.co/datasets/abisee/cnn_dailymail">https://huggingface.co/datasets/abisee/cnn_dailymail</a></li>
+</ol>
+<h1 id="appendix-a-spacy-label-mapping">Appendix A: SpaCy Label Mapping</h1>
+<p>SpaCy model output labels do not correspond one-to-one with the ground-truth annotations used in this study (i.e., ORG/“organization”, LOC/“location”, and PER/“person”). SpaCy labels were mapped to the ground-truth labels as follows:</p>
+<p><strong>SpaCy labels corresponding to ground-truth labels</strong>:</p>
+<ul>
+<li>PERSON (maps to ground-truth PER)</li>
+<li>GPE (“geo-political entity”, maps to ground-truth LOC)</li>
+<li>FAC (“facility”, e.g., buildings - maps to LOC)</li>
+<li>LOC (equivalent to ground-truth LOC)</li>
+<li>ORG (equivalent to ground-truth ORG)</li>
+<li>NORP (“nationalities or religious or political groups”, maps to ORG)
+<strong>SpaCy labels not corresponding to ground-truth labels</strong>:</li>
+<li>WORK_OF_ART</li>
+<li>CARDINAL (number)</li>
+<li>PRODUCT</li>
+<li>DATE</li>
+<li>LANGUAGE</li>
+</ul>  </div> </div> <div class="lg:col-span-3 space-y-10 mt-16 lg:mt-0"> <div class="sticky top-32 max-h-[calc(100vh-8rem)] overflow-y-auto"> <div class="text-[10px] text-orange-600 font-mono font-bold uppercase tracking-widest mb-4">Contents</div> <nav class="space-y-2 text-sm pr-4"> <div key="Abstract"> <a href="#abstract" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Abstract </a>  </div><div key="Introduction"> <a href="#introduction" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Introduction </a>  </div><div key="Methodology"> <a href="#methodology" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Methodology </a>  </div><div key="Model Selection"> <a href="#model-selection" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Model Selection </a>  </div><div key="Ground-Truth Data Creation"> <a href="#ground-truth-data-creation" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Ground-Truth Data Creation </a>  </div><div key="Evaluation Metrics"> <a href="#evaluation-metrics" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Evaluation Metrics </a>  </div><div key="Pipeline Setup"> <a href="#pipeline-setup" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Pipeline Setup </a>  </div><div key="Results and Discussion"> <a href="#results-and-discussion" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Results and Discussion </a>  </div><div key="NER Models"> <a href="#ner-models" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> NER Models </a>  </div><div key="Summarization Models"> <a href="#summarization-models" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Summarization Models </a>  </div><div key="Conclusion"> <a href="#conclusion" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Conclusion </a>  </div><div key="References"> <a href="#references" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> References </a>  </div><div key="Appendix A: SpaCy Label Mapping"> <a href="#appendix-a-spacy-label-mapping" class="text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 block py-1"> Appendix A: SpaCy Label Mapping </a>  </div> </nav> </div>  </div> </div>  </section>  </main> <footer class="mt-16 mb-8"> <p class="zag-text zag-transition text-center text-sm font-medium">
+&copy; 2026 Ryan. All rights reserved.
+</p> </footer> </body></html>
